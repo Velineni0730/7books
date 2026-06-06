@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  /* This tells Tailwind v4 to create a font-switzer utility class */
+  --font-switzer: 'Switzer', sans-serif;
+}
+
+@font-face {
+  font-family: 'Switzer';
+  /* Updated exact path based on your directory structure */
+  src: url('./assets/Fonts/WEB/fonts/Switzer-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Switzer';
+  /* Updated exact path */
+  src: url('./assets/Fonts/WEB/fonts/Switzer-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+body {
+  font-family: var(--font-switzer);
+  background-color: #ffffff;
+  color: #111827; /* gray-900 */
+}
