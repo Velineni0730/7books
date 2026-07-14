@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Navbar from "../components/Navbar";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -64,34 +65,12 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-[linear-gradient(to_bottom,#eabfb3_0%,#fcf8f2_30%,#fcf8f2_70%,#eabfb3_100%)] font-switzer text-gray-900">
 
-      <nav className="w-full px-4 md:px-8 h-[80px] flex justify-between items-center sticky top-0 z-50 bg-white/50 backdrop-blur-md border-b border-gray-200/50">
-        <div className="text-xl md:text-2xl font-bold tracking-tight cursor-pointer"
-          onClick={() => navigate('/')}>7books.in</div>
-        <div className="hidden md:flex space-x-8 lg:space-x-12 text-sm font-medium text-gray-800">
-          <Link to="/samples" className="hover:text-black transition-colors">Samples</Link>
-          <Link to="/dashboard" className="hover:text-black transition-colors">E-Books</Link>
-          <span className="font-bold text-black border-b-2 border-black pb-1">My E-Books</span>
-          <Link to="/about" className="hover:text-black transition-colors">About Us</Link>
-        </div>
-        <div className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          <div className="relative group">
-            <button className="px-5 py-2 bg-gray-900 text-white rounded-full font-bold capitalize shadow-md hover:bg-gray-800 transition">
-              {username || 'Reader'}
-            </button>
-            <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 group-hover:opacity-100 transition-opacity invisible group-hover:visible overflow-hidden">
-              <button onClick={handleLogout}
-                className="w-full px-4 py-3 text-sm text-red-500 hover:bg-gray-50 text-left font-bold transition">
-                Log out
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
-      <main className="max-w-7xl mx-auto px-4 md:px-8 py-12">
-        <div className="mb-10 text-center">
-          <h1 className="text-4xl font-bold tracking-tight mb-2">Your Library</h1>
-          <p className="text-gray-600 font-medium">
+      <main className="max-w-7xl mx-auto px-4 md:px-8 pt-24 pb-20">
+        <div className="flex flex-col items-center justify-center text-center mb-16">
+          <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-gray-900">Your Library</h1>
+          <p className="mt-4 text-lg text-gray-600 max-w-xl">
             {books.length > 0
               ? `${books.length} book${books.length !== 1 ? 's' : ''} in your collection`
               : 'Upload your first e-book to get started'}
@@ -100,7 +79,7 @@ export default function Dashboard() {
 
         {/* Books grid */}
         {books.length > 0 && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-12">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 mb-16">
             {books.map(book => (
               <div key={book._id}
                 onClick={() => openBook(book._id)}
@@ -127,8 +106,8 @@ export default function Dashboard() {
         )}
 
         {/* Upload card */}
-        <div className="max-w-xl mx-auto">
-          <div className="bg-gray-900 rounded-3xl p-10 shadow-2xl flex flex-col items-center text-center relative overflow-hidden group hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500">
+        <div className="max-w-2xl mx-auto mt-10">
+          <div className="bg-gray-900 rounded-3xl p-12 shadow-2xl flex flex-col items-center text-center relative overflow-hidden group hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500">
             <div className="absolute -top-20 -right-20 w-56 h-56 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-all duration-500" />
             <div className="absolute -bottom-20 -left-20 w-56 h-56 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-all duration-500" />
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Navbar from "../components/Navbar";
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -34,39 +35,7 @@ export default function Home() {
   return (
     <div className="font-switzer relative text-gray-900 selection:bg-gray-200 min-h-screen bg-[linear-gradient(to_bottom,#eabfb3_0%,#fcf8f2_30%,#fcf8f2_70%,#eabfb3_100%)]">
       
-      {/* THE MASTER NAVBAR - Glassmorphism applied */}
-      <nav className="w-full px-4 md:px-8 h-[80px] flex justify-between items-center sticky top-0 z-50 transition-all bg-white/50 backdrop-blur-md border-b border-gray-200/50">
-        <div className="text-xl md:text-2xl font-bold tracking-tight cursor-pointer" onClick={() => navigate('/')}>
-          7books.in
-        </div>
-        
-        <div className="hidden md:flex space-x-8 lg:space-x-12 text-sm font-medium text-gray-800">
-          <Link to="/samples" className="hover:text-black transition-colors">Samples</Link>
-          <Link to="/dashboard" onClick={handleEbooksClick} className="hover:text-black transition-colors">E-Books</Link>
-          <Link to="/Editor" onClick={handleEbooksClick} className="hover:text-black transition-colors">My E-Books</Link>
-          <Link to="/books" className="hover:text-black transition-colors">Books</Link>
-          <Link to="/about" className="hover:text-black transition-colors">About Us</Link>
-        </div>
-        
-        <div className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          {isLoggedIn ? (
-            <div className="relative group">
-              <button className="px-5 py-2 bg-gray-900 text-white rounded-full font-bold capitalize shadow-md hover:bg-gray-800 transition">
-                {username}
-              </button>
-              {/* Hover Dropdown for Logout */}
-              <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 group-hover:opacity-100 transition-opacity invisible group-hover:visible overflow-hidden">
-                <button onClick={handleLogout} className="w-full px-4 py-3 text-sm text-red-500 hover:bg-gray-50 text-left font-bold transition">Log out</button>
-              </div>
-            </div>
-          ) : (
-            <>
-              <Link to="/login" className="text-gray-800 hover:text-black transition-colors font-bold">Log in</Link>
-              <Link to="/login" className="px-5 py-2 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors shadow-md font-bold">Register</Link>
-            </>
-          )}
-        </div>
-      </nav>
+    <Navbar />
 
       {/* Hero Section */}
       <header className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center px-4 md:px-8 text-center pb-20">
