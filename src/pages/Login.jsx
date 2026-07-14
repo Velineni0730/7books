@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 export default function Login() {
   const [isRegistering, setIsRegistering] = useState(false);
@@ -15,7 +17,7 @@ export default function Login() {
     const endpoint = isRegistering ? '/api/auth/register' : '/api/auth/login';
     
     try {
-      const response = await fetch(`http://localhost:5001${endpoint}`, {
+      const response = await fetch(`${API_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

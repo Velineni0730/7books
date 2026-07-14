@@ -2,6 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { renderAsync } from "docx-preview";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+
 // ─── THEMES: 6 colour themes + 1 "Book Theme" (filled after cover extraction) ──
 const BASE_THEMES = {
   book:     { name: "Book",     pageBg: "#ffffff", pageText: "#111111", outerBg: "#333333", isBook: true },
@@ -151,7 +154,7 @@ export default function Editor() {
   // ── 1. Fetch book ──────────────────────────────────────────────────────────
   useEffect(() => {
     if (!bookId) { navigate("/dashboard"); return; }
-    fetch(`http://localhost:5001/api/books/${bookId}`)
+    fetch(`${API_URL}/api/books/${bookId}`)
       .then(r => r.json())
       .then(data => { setBook(data); setTitleDraft(data.title || ""); setLoading(false); })
       .catch(() => setLoading(false));
@@ -162,7 +165,7 @@ export default function Editor() {
     if (!book?.docxUrl || !hiddenRef.current || rendered) return;
     (async () => {
       try {
-        const res  = await fetch(`http://localhost:5001/${book.docxUrl}`);
+        const res  = await fetch(`${API_URL}/api/books/${book.docxUrl}`);
         const blob = await res.blob();
         hiddenRef.current.innerHTML = "";
         await renderAsync(blob, hiddenRef.current, null, {
@@ -326,7 +329,7 @@ export default function Editor() {
     if (titleDraft === book.title) return;
     setBook(b => ({ ...b, title: titleDraft }));
     try {
-      await fetch(`http://localhost:5001/api/books/${bookId}`, {
+      await fetch(`${API_URL}/api/books/${bookId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: titleDraft }),

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from "../components/Navbar";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function Dashboard() {
   const loadBooks = async () => {
     try {
       const userId = localStorage.getItem('7books_userId') || '000000000000000000000001';
-      const res = await fetch(`http://localhost:5001/api/books/user/${userId}`);
+      const res = await fetch(`${API_URL}/api/books/user/${userId}`);
       if (res.ok) {
         const data = await res.json();
         setBooks(data);
@@ -37,7 +38,7 @@ export default function Dashboard() {
       const userId = localStorage.getItem('7books_userId');
       if (userId) formData.append('userId', userId);
 
-      const response = await fetch('http://localhost:5001/api/books/upload-pdf', {
+      const response = await fetch(`${API_URL}/api/books/upload-pdf`, {
         method: 'POST',
         body: formData,
       });
