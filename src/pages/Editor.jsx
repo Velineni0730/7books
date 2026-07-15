@@ -165,7 +165,7 @@ export default function Editor() {
     if (!book?.docxUrl || !hiddenRef.current || rendered) return;
     (async () => {
       try {
-        const res  = await fetch(`${API_URL}/api/books/${book.docxUrl}`);
+        const res = await fetch(`${API_URL}/${book.docxUrl}`);
         const blob = await res.blob();
         hiddenRef.current.innerHTML = "";
         await renderAsync(blob, hiddenRef.current, null, {
