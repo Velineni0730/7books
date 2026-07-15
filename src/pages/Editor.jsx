@@ -197,10 +197,14 @@ export default function Editor() {
     })();
   }, [book, rendered]);
 
-  // ── 3. Show current spread — scale-to-fit each page into its slot ────────
+  // ── 3. Show current spread — scale-to-fit each page, anchored to the spine ──
   // docx-preview stamps a fixed pixel width on every section (e.g. 816px).
   // We wrap each page in a "slot" div that fills its half (or full) of the
-  // reading area, then scale the inner page to exactly fill that slot.
+  // reading area, then scale the inner page to fit that slot while keeping
+  // proportions. In double-page view the left page is pinned to the RIGHT
+  // edge of its slot and the right page is pinned to the LEFT edge of its
+  // slot, so the two pages meet at the centre spine like a real open book —
+  // any leftover space only shows up on the outer edges, not in the middle.
   useEffect(() => {
     if (!rendered || !viewerRef.current || allPages.length === 0) return;
     viewerRef.current.innerHTML = "";
@@ -218,40 +222,69 @@ export default function Editor() {
       slot.style.minWidth      = "0";
       slot.style.height        = "100%";
       slot.style.display       = "flex";
-      slot.style.alignItems    = "center";
-      slot.style.justifyContent = "center";
+      slot.style.alignItems    = "stretch";
+      slot.style.justifyContent = "stretch";
       slot.style.overflow      = "hidden";
       slot.style.position      = "relative";
 
       if (pg) {
         const clone = pg.cloneNode(true);
-        // Read the natural page dimensions docx-preview baked in
-        const naturalW = parseFloat(clone.style.width)  || 816;
-        const naturalH = parseFloat(clone.style.height) || 1056;
+        const rect = pg.getBoundingClientRect();
+        const naturalW = rect.width  || parseFloat(clone.style.width)  || 816;
+        const naturalH = rect.height || parseFloat(clone.style.height) || 1056;
+        const padX = 140;
+        const padY = 160; // 80px top + 80px bottom
+
 
         // Reset inline layout — we control sizing via transform
         clone.style.cssText      = "";
         clone.style.width        = `${naturalW}px`;
         clone.style.height       = `${naturalH}px`;
         clone.style.background   = theme.pageBg;
-        clone.style.boxShadow    = "0 8px 48px rgba(0,0,0,0.28)";
+        clone.style.boxShadow    = "0 4px 20px rgba(0,0,0,.18)";
         clone.style.borderRadius = "4px";
         clone.style.boxSizing    = "border-box";
         clone.style.flexShrink   = "0";
         clone.style.position     = "relative";
+        clone.style.padding = "20px 20px"; // docx-preview adds 20px padding to each section
+
 
         slot.appendChild(clone);
 
-        // Scale the clone to fill its slot — recalculate on every resize
+        // Is this the left half or right half of an open double-page spread?
+        const isLeftPage  = spread === 2 && i === 0;
+        const isRightPage = spread === 2 && i === 1;
+
+        // Scale + position the clone to fill its slot — recalculate on every resize
         const fit = () => {
           const sw = slot.offsetWidth  || 1;
           const sh = slot.offsetHeight || 1;
-          // Leave a small margin (96px total H, 48px total V) so the page "floats"
-          const scaleX = (sw - 48) / naturalW;
-          const scaleY = (sh - 32) / naturalH;
+          const scaleX = sw / naturalW;
+          const scaleY = sh / naturalH;
+
+          // Fill the available area while keeping proportions
           const s = Math.min(scaleX, scaleY);
-          clone.style.transform       = `scale(${s})`;
-          clone.style.transformOrigin = "center center";
+
+          clone.style.position       = "absolute";
+          clone.style.top            = "50%";
+          clone.style.transformOrigin = isLeftPage ? "right center" : isRightPage ? "left center" : "center center";
+
+          if (isLeftPage) {
+            // Pin to the right edge of the slot (touches the spine)
+            clone.style.left   = "auto";
+            clone.style.right  = "0";
+            clone.style.transform = `translateY(-50%) scale(${s})`;
+          } else if (isRightPage) {
+            // Pin to the left edge of the slot (touches the spine)
+            clone.style.left   = "0";
+            clone.style.right  = "auto";
+            clone.style.transform = `translateY(-50%) scale(${s})`;
+          } else {
+            // Single-page view — just centre it
+            clone.style.left   = "50%";
+            clone.style.right  = "auto";
+            clone.style.transform = `translate(-50%, -50%) scale(${s})`;
+          }
         };
 
         // Run immediately and on any container resize
@@ -564,12 +597,14 @@ export default function Editor() {
           }} />
         )}
 
-        {/* Pages — each slot fills half (double) or full (single), content scaled to fit */}
+        {/* Pages — each slot fills half (double) or full (single) of the reading
+            area; in double view the pages are pinned to the spine so they meet
+            in the middle instead of floating centred with a gap between them. */}
         <div ref={viewerRef} id="docx-viewer" style={{
           display:"flex",
           flexDirection:"row",
           position:"absolute",
-          inset: "24px 52px 36px 52px",
+          inset: "24px 24px 36px 24px",
           alignItems:"stretch",
           transform:`scale(${zoom})`,
           transformOrigin:"center center",
