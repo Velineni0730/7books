@@ -76,13 +76,6 @@ export default function Navbar() {
                 </Link>
 
                 <Link
-                    to="/books"
-                    className={activeClass("/books")}
-                >
-                    Books
-                </Link>
-
-                <Link
                     to="/about"
                     className={activeClass("/about")}
                 >
