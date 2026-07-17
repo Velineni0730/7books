@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from "../components/Navbar";
+import bushido from "../assets/images/bushido.jpg";
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -40,13 +41,13 @@ export default function Home() {
       {/* Hero Section */}
       <header className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center px-4 md:px-8 text-center pb-20">
         <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tighter max-w-4xl leading-tight">
-          Create your own e-book from text or a downloaded PDF.
+          Turn your PDFs into an immersive digital reading experience.
         </h1>
         <p className="mt-8 text-base md:text-lg text-gray-700 max-w-2xl font-medium tracking-wide">
-          Aesthetically pleasing, fully customizable, and focused on your reading experience.
+          Upload any PDF, personalize your reading experience with beautiful themes and layouts, and enjoy every page in comfort.
         </p>
         <Link to={isLoggedIn ? "/dashboard" : "/login"} className="mt-12 px-10 py-4 bg-gray-900 text-white font-bold rounded-full hover:bg-gray-800 transition-transform hover:scale-105 shadow-xl">
-          Start Creating
+          Start Reading
         </Link>
       </header>
 
@@ -67,7 +68,11 @@ export default function Home() {
                   <div className="group cursor-pointer">
                       <div className="bg-white/80 backdrop-blur-md rounded-2xl p-4 shadow-sm group-hover:shadow-xl transition-all duration-300 border border-gray-100">
                           <div className="aspect-[2/3] w-full overflow-hidden rounded-xl bg-gray-100 mb-6 relative">
-                              <div className="w-full h-full bg-gray-300 flex items-center justify-center text-gray-500 font-bold">Image Placeholder</div>
+                              <div className="w-full h-full bg-gray-300 flex items-center justify-center text-gray-500 font-bold"><img
+    src={bushido}
+    alt="Bushido"
+    className="w-full h-full object-cover rounded-2xl"
+/></div>
                           </div>
                           <div className="px-2 pb-2">
                               <h3 className="font-bold text-lg tracking-tight">Bushido</h3>

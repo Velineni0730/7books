@@ -4,7 +4,8 @@ import Home from './pages/Home';
 import Editor from './pages/Editor';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import About from "./pages/About";
+import About from './pages/About';
+import Samples from './pages/Samples';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/editor" element={<Editor />} />
         <Route path="/about" element={<About />} />
+        <Route path="/samples" element={<Samples />} />
       </Routes>
     </Router>
   );
